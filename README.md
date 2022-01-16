@@ -7,11 +7,8 @@
 <img src="https://user-images.githubusercontent.com/96627099/148779614-6ce9006a-6bf3-4c15-87d5-1b3e12ed10b9.png" width="883" height="400" />
 </div>
 
-# 矿工交流 TG电报群：https://t.me/Miner_Proxy
+# 矿工交流 TG电报群：https://t.me/+h5eCcxlmHzg3NzA9
 
-<div align="center">
-<img src="https://user-images.githubusercontent.com/96627099/147364637-3db2caea-f536-4a9c-ad7d-d062559d46fe.png" width="500" height="500" />
-</div>
 
 # Liunx-一键安装脚本
 好处：适合又想要Linux稳定性的，又不懂Linux的小白的学习者<br />
