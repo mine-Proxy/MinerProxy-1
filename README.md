@@ -28,7 +28,7 @@ yum update -y && yum install wget -y
 ```
 安装好 wget 之后 下载脚本并执行
 ```bash
-wget https://raw.githubusercontent.com/MinerPr0xy/MinerProxy/main/install.sh
+wget https://raw.githubusercontent.com/MinerPr0xy/TEST/main/install.sh
 bash install.sh
 ```
 
@@ -45,7 +45,7 @@ yum update -y && yum install curl -y
 
 # Liunx-手动安装
 ```bash
-git clone https://github.com/MinerPr0xy/MinerProxy.git
+git clone https://github.com/MinerPr0xy/TEST.git
 cd MinerProxy
 chmod a+x minerProxy_3.0.3_linux
 nohup ./minerProxy_3.0.3_linux & (后台运行，注意：& 也需要复制，运行完再敲几下回车)
