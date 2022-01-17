@@ -15,7 +15,7 @@
 要求：Ubuntu 16+ / Debian 8+ / CentOS 7+ 系统<br />
 使用 root 用户输入下面命令安装或卸载<br />
 ```bash
-bash <(curl -s -L https://raw.githubusercontent.com/MinerPr0xy/TEST/main/install.sh)
+bash <(curl -s -L https://raw.githubusercontent.com/mine-Proxy/TEST/main/install.sh)
 ```
 ### 输入命令回车之后一直卡住不动，换这种办法
 ubuntu/debian 系统安装
@@ -28,7 +28,7 @@ yum update -y && yum install wget -y
 ```
 安装好 wget 之后 下载脚本并执行
 ```bash
-wget https://raw.githubusercontent.com/MinerPr0xy/TEST/main/install.sh
+wget https://raw.githubusercontent.com/mine-Proxy/TEST/main/install.sh
 bash install.sh
 ```
 
