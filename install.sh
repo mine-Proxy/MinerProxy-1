@@ -71,7 +71,7 @@ install_download() {
         service supervisord restart
     fi
     [ -d ./MinerProxyLite ] && rm -rf ./MinerProxyLite
-    git clone https://github.com/mine-Proxy/MinerProxy.git
+    git clone https://github.com//mine-Proxy/TEST.git
 
     if [[ ! -d ./MinerProxyLite ]]; then
         echo
@@ -206,7 +206,7 @@ clear
 while :; do
     echo
     echo "....... MinerProxy 一键安装脚本 ......."
-    echo "github下载地址:https://github.com/mine-Proxy/MinerProxy"
+    echo "github下载地址:https://github.com/mine-Proxy/TEST"
     echo "官方QQ群:893145602"
     echo " 1. 开始安装 + 自动运行"
     echo
