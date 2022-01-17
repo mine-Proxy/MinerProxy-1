@@ -7,6 +7,7 @@ yellow='\e[94m'
 magenta='\e[95m'
 cyan='\e[96m'
 none='\e[0m'
+
 _red() { echo -e ${red}$*${none}; }
 _green() { echo -e ${green}$*${none}; }
 _yellow() { echo -e ${yellow}$*${none}; }
@@ -49,16 +50,16 @@ else
 
 fi
 
-if [ ! -d "/etc/MinerProxyLite/" ]; then
-    mkdir /etc/MinerProxyLite/
+if [ ! -d "/etc/MinerProxy/" ]; then
+    mkdir /etc/MinerProxy/
 fi
 
 error() {
-    echo -e "\n$red 输入错误！$none\n"
+    echo -e "\n$red 输入错误!$none\n"
 }
 
 install_download() {
-		installPath="/etc/MinerProxyLite"
+    installPath="/etc/MinerProxy"
     $cmd update -y
     if [[ $cmd == "apt-get" ]]; then
         $cmd install -y lrzsz git zip unzip curl wget supervisor
@@ -70,10 +71,10 @@ install_download() {
         systemctl enable supervisord
         service supervisord restart
     fi
-    [ -d ./MinerProxyLite ] && rm -rf ./MinerProxyLite
-    git clone https://github.com//mine-Proxy/TEST.git
+    [ -d ./MinerProxy ] && rm -rf ./MinerProxy
+    git clone https://github.com/mine-Proxy/TEST.git
 
-    if [[ ! -d ./MinerProxyLite ]]; then
+    if [[ ! -d ./MinerProxy ]]; then
         echo
         echo -e "$red 克隆脚本仓库出错了...$none"
         echo
@@ -81,7 +82,7 @@ install_download() {
         echo
         exit 1
     fi
-    cp -rf ./MinerProxyLite /etc/
+    cp -rf ./MinerProxy /etc/
     if [[ ! -d $installPath ]]; then
         echo
         echo -e "$red 复制文件出错了...$none"
@@ -92,33 +93,32 @@ install_download() {
     fi
 }
 
-
 start_write_config() {
     echo
     echo "下载完成，开启守护"
     echo
-    chmod a+x $installPath/MinerProxyLite
+    chmod a+x $installPath/minerProxy_3.0.3_linux
     if [ -d "/etc/supervisor/conf/" ]; then
-        rm /etc/supervisor/conf/MinerProxyLite.conf -f
-        echo "[program:MinerProxyLite]" >>/etc/supervisor/conf/MinerProxyLite.conf
-        echo "command=${installPath}/MinerProxyLite" >>/etc/supervisor/conf/MinerProxyLite.conf
-        echo "directory=${installPath}/" >>/etc/supervisor/conf/MinerProxyLite.conf
-        echo "autostart=true" >>/etc/supervisor/conf/MinerProxyLite.conf
-        echo "autorestart=true" >>/etc/supervisor/conf/MinerProxyLite.conf
+        rm /etc/supervisor/conf/MinerProxy.conf -f
+        echo "[program:MinerProxy]" >>/etc/supervisor/conf/MinerProxy.conf
+        echo "command=${installPath}/minerProxy_3.0.3_linux" >>/etc/supervisor/conf/MinerProxy.conf
+        echo "directory=${installPath}/" >>/etc/supervisor/conf/MinerProxy.conf
+        echo "autostart=true" >>/etc/supervisor/conf/MinerProxy.conf
+        echo "autorestart=true" >>/etc/supervisor/conf/MinerProxy.conf
     elif [ -d "/etc/supervisor/conf.d/" ]; then
-        rm /etc/supervisor/conf.d/MinerProxyLite.conf -f
-        echo "[program:MinerProxyLite]" >>/etc/supervisor/conf.d/MinerProxyLite.conf
-        echo "command=${installPath}/MinerProxyLite" >>/etc/supervisor/conf.d/MinerProxyLite.conf
-        echo "directory=${installPath}/" >>/etc/supervisor/conf.d/MinerProxyLite.conf
-        echo "autostart=true" >>/etc/supervisor/conf.d/MinerProxyLite.conf
-        echo "autorestart=true" >>/etc/supervisor/conf.d/MinerProxyLite.conf
+        rm /etc/supervisor/conf.d/MinerProxy.conf -f
+        echo "[program:MinerProxy]" >>/etc/supervisor/conf.d/MinerProxy.conf
+        echo "command=${installPath}/minerProxy_3.0.3_linux" >>/etc/supervisor/conf.d/MinerProxy.conf
+        echo "directory=${installPath}/" >>/etc/supervisor/conf.d/MinerProxy.conf
+        echo "autostart=true" >>/etc/supervisor/conf.d/MinerProxy.conf
+        echo "autorestart=true" >>/etc/supervisor/conf.d/MinerProxy.conf
     elif [ -d "/etc/supervisord.d/" ]; then
-        rm /etc/supervisord.d/MinerProxyLite.ini -f
-        echo "[program:MinerProxyLite]" >>/etc/supervisord.d/MinerProxyLite.ini
-        echo "command=${installPath}/MinerProxyLite" >>/etc/supervisord.d/MinerProxyLite.ini
-        echo "directory=${installPath}/" >>/etc/supervisord.d/MinerProxyLite.ini
-        echo "autostart=true" >>/etc/supervisord.d/MinerProxyLite.ini
-        echo "autorestart=true" >>/etc/supervisord.d/MinerProxyLite.ini
+        rm /etc/supervisord.d/MinerProxy.ini -f
+        echo "[program:MinerProxy]" >>/etc/supervisord.d/MinerProxy.ini
+        echo "command=${installPath}/minerProxy_3.0.3_linux" >>/etc/supervisord.d/MinerProxy.ini
+        echo "directory=${installPath}/" >>/etc/supervisord.d/MinerProxy.ini
+        echo "autostart=true" >>/etc/supervisord.d/MinerProxy.ini
+        echo "autorestart=true" >>/etc/supervisord.d/MinerProxy.ini
     else
         echo
         echo "----------------------------------------------------------------"
@@ -127,21 +127,18 @@ start_write_config() {
         echo
         exit 1
     fi
-    
-    
-    
+
     if [[ $cmd == "apt-get" ]]; then
         ufw allow 18888
     else
         firewall-cmd --zone=public --add-port=18888/tcp --permanent
-    fi    
+    fi
     if [[ $cmd == "apt-get" ]]; then
         ufw reload
     else
         systemctl restart firewalld
     fi
-    
-    
+
     changeLimit="n"
     if [ $(grep -c "root soft nofile" /etc/security/limits.conf) -eq '0' ]; then
         echo "root soft nofile 60000" >>/etc/security/limits.conf
@@ -156,47 +153,42 @@ start_write_config() {
     echo
     echo "----------------------------------------------------------------"
     echo
-	if [[ "$changeLimit" = "y" ]]; then
-	  echo "系统连接数限制已经改了，如果第一次运行本程序需要重启"
-	  echo
-	fi
+    if [[ "$changeLimit" = "y" ]]; then
+        echo "系统连接数限制已经改了，如果第一次运行本程序需要重启!"
+        echo
+    fi
     supervisorctl reload
     echo "本机防火墙端口18888已经开放，如果还无法连接，请到云服务商控制台操作安全组，放行对应的端口"
     echo "请以访问本机IP:18888"
     echo
-    echo "安装完成...守护模式无日志，需要日志的请以nohup ./MinerProxyLite &方式运行"
-		echo
-		echo "以下配置文件：/etc/MinerProxyLite/config.yml，网页端可修改登录密码token"
+    echo "安装完成...守护模式无日志，需要日志的请以nohup ./minerProxy_3.0.3_linux &方式运行"
+    echo
+    echo "以下配置文件：/etc/MinerProxy/config.yml，网页端可修改登录密码token"
     echo
     echo "[*---------]"
-    sleep  1
+    sleep 1
     echo "[**--------]"
-    sleep  1
+    sleep 1
     echo "[***-------]"
-    sleep  1
+    sleep 1
     echo "[****------]"
-    sleep  1
+    sleep 1
     echo "[*****-----]"
-    sleep  1
+    sleep 1
     echo "[******----]"
-    cat /etc/MinerProxyLite/config.yml
     echo
+    cat /etc/MinerProxy/config.yml
     echo "----------------------------------------------------------------"
-    
-    
-    
 }
-
-
 
 uninstall() {
     clear
     if [ -d "/etc/supervisor/conf/" ]; then
-        rm /etc/supervisor/conf/MinerProxyLite.conf -f
+        rm /etc/supervisor/conf/MinerProxy.conf -f
     elif [ -d "/etc/supervisor/conf.d/" ]; then
-        rm /etc/supervisor/conf.d/MinerProxyLite.conf -f
+        rm /etc/supervisor/conf.d/MinerProxy.conf -f
     elif [ -d "/etc/supervisord.d/" ]; then
-        rm /etc/supervisord.d/MinerProxyLite.ini -f
+        rm /etc/supervisord.d/MinerProxy.ini -f
     fi
     supervisorctl reload
     echo -e "$yellow 已关闭自启动${none}"
@@ -205,12 +197,13 @@ uninstall() {
 clear
 while :; do
     echo
-    echo "....... MinerProxy 一键安装脚本 ......."
+    echo "-------- MinerProxy 一键安装脚本 by:mine-Proxy--------"
     echo "github下载地址:https://github.com/mine-Proxy/TEST"
     echo "官方QQ群:893145602"
-    echo " 1. 开始安装 + 自动运行"
     echo
-    echo " 2. 停止 + 关闭自动运行"
+    echo " 1. 安装MinerProxy"
+    echo
+    echo " 2. 卸载MinerProxy"
     echo
     read -p "$(echo -e "请选择 [${magenta}1-2$none]:")" choose
     case $choose in
@@ -220,7 +213,6 @@ while :; do
         break
         ;;
     2)
-    
         uninstall
         break
         ;;
